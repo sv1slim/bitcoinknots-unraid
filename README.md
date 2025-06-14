@@ -1,6 +1,18 @@
-# bitcoinknots-unraid
-Contains instructions on how to create your own bitcoinknots image and run it in UNRAID or Docker.
-### 1. Create a Dockerfile
+Run your own bitcoinknots container on Unraid or Docker.
+
+![image](https://github.com/user-attachments/assets/6acc47ad-3c0a-4676-9813-fbc583f906db)
+
+### 1. Prepare a new share in Unraid
+
+Go to Unraid → Shares → Add Share
+Share Name: bitcoin 
+Export:     Yes
+Security:   Public (do not forget to change to Secure or Private at the end)
+
+![image](https://github.com/user-attachments/assets/830b45b1-ea0a-42e7-b0de-6955363eaada)
+
+
+### 2. Create a Dockerfile
 
 Dockerfile
 
@@ -103,8 +115,6 @@ here is the screenshot
 
 
 DONE > Click on Container icon > `Logs` > check if the blockchain is synching. 
-
-![image](https://github.com/user-attachments/assets/6acc47ad-3c0a-4676-9813-fbc583f906db)
 
 
 If want to run it in Docker run the follwing command.
