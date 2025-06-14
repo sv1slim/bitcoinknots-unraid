@@ -1,4 +1,4 @@
-Run your own bitcoinknots container on Unraid or Docker.
+Run your own `bitcoinknots` container on Unraid or Docker.
 
 ![image](https://github.com/user-attachments/assets/6acc47ad-3c0a-4676-9813-fbc583f906db)
 
