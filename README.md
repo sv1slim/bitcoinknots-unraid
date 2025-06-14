@@ -104,6 +104,8 @@ here is the screenshot
 
 DONE > Click on Container icon > `Logs` > check if the blockchain is synching. 
 
+![image](https://github.com/user-attachments/assets/6acc47ad-3c0a-4676-9813-fbc583f906db)
+
 
 If want to run it in Docker run the follwing command.
 
