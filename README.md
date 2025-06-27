@@ -1,6 +1,7 @@
 Run your own `bitcoin-knots` container on Unraid (Docker) and access `bitcoin-qt` in `WebUI` using browser.
 
-![Pasted image 20250627161810](https://github.com/user-attachments/assets/0af3d5e3-ce4e-48c6-8e41-24a6c47ff496)
+![Pasted image 20250627161810](https://github.com/user-attachments/assets/3b01d4c0-498c-4f30-8c14-e0188b08878d)
+
 
 
 ---
