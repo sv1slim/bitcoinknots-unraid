@@ -1,63 +1,65 @@
-Run your own `bitcoinknots` container on Unraid or Docker.
+Run your own `bitcoin-knots` container on Unraid (Docker) and access `bitcoin-qt` in `WebUI` using browser.
 
-![image](https://github.com/user-attachments/assets/6acc47ad-3c0a-4676-9813-fbc583f906db)
+![Pasted image 20250627161810](https://github.com/user-attachments/assets/0af3d5e3-ce4e-48c6-8e41-24a6c47ff496)
+
 
 ---
 
-### 1. Prepare a new share in Unraid
+### 1. Prepare a new share in Unraid using NVMe as a primary storage
 
+ Bitcoin nodes needs **fast random I/O** and Prefer **low latency**, **high write endurance**, and **fast reads**. A `Nvme` Pool Device with at least 1Tb in disk space will be perfect for that. Do not use Unraid Array to store blockchain data as it's verry slow due to parity. 
+ Once your NVMe is attached and added to the list of Pool Device:
+ 
 Go to **Unraid** → **Shares** → **Add Share**
 
-Share Name: **bitcoin**
+| Line            | Value   | Comments                                                                                                                               |
+| --------------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Share Name      | bitcoin | Can be any name of your dedicated share to store blockchain data and configurations.                                                   |
+| Primary Storage | Nvme    | It's important to select from drop down menu your Pool device pointing to nvme                                                         |
+| Export          | Yes     | temporary grant read/write access to the share to make sure dockerfile can be uploaded from github.                                    |
+| Security        | Public  | You need read/write access to the share. Do not forget to change to **Secure** or **Private** at the end once everything is configured |
 
-Export:     **Yes**
+![Pasted image 20250627114331](https://github.com/user-attachments/assets/8dd7997f-6a21-4a41-aa68-de112cc0074d)
 
-Security:   **Public** (do not forget to change to **Secure** or **Private** at the end)
-
-![image](https://github.com/user-attachments/assets/830b45b1-ea0a-42e7-b0de-6955363eaada)
 
 ---
 
 ### 2. Copy Dockerfile, blockchain data and bitcoin.conf file.
 
-Download the project as a ZIP and copy `Dockerfile-BitcoinKnotsXX.X` folder with the latest version into your `\\unraid.local\bitcoin` location.
+If you have a copy of blockchain data: `blocks` and `chainstate` folders - move blockchain data using **Unraid's mover tool** or do it manually:
 
-If you have a copy of blockchain data, copy `blocks` and `chainstate` folders into the same Unraid share. 
-
-Create a `bitcoin.conf` file in your `bitcoin` Unraid share. This file must be created, otherwise you would not be able to connect to your copy of blockchain.
-
-Replace `myuser` and `mypassword` with a strong username and password.
-
-`bitcoin.conf`
-``` ini
-server=1
-rpcuser=myuser
-rpcpassword=mypassword
-txindex=1
-zmqpubrawtx=tcp://0.0.0.0:28332
-zmqpubrawblock=tcp://0.0.0.0:28333
+``` bash
+# Move appdata from cache to nvme pool 
+mv -v /mnt/cache/appdata/bitcoin/* /mnt/user/bitcoin/
 ```
 
-![image](https://github.com/user-attachments/assets/137af59f-f3b2-4d10-b47b-57ad09a30220)
 
+Download the project manually as a ZIP or clone it using `git` 
+
+``` shell
+git clone https://github.com/sv1slim/bitcoinknots-unraid
+```
+
+
+Copy `Dockerfile-BitcoinKnots-GUI-xx.x` folder with the latest version `xx.x` into your `\\unraid.local\bitcoin` share.
 
 ---
 
 ### 3. Build the image on Unraid
 
-Open Unraid Terminal and get into `Dockerfile` folder
+Open Unraid Terminal and get into `Dockerfile` folder.
 
 ``` bash
-cd /mnt/user/bitcoin/Dockerfile-BitcoinKnots28.1/
+cd /mnt/user/bitcoin/Dockerfile-BitcoinKnots-GUI-28.1/
 ```
 
-Run docker build command to create `bitcoinknots` image using `Dcokerfile` located in `/mnt/user/bitcoin/Dockerfile-BitcoinKnotsXX.X/` folder.
+Run docker build command to create `bitcoin-knots-gui` image using `Dcokerfile` located in `/mnt/user/bitcoin/Dockerfile-BitcoinKnots-GUI-xx.x/` folder.
 
 ``` bash
-docker build -t bitcoinknots .
+docker build -t bitcoin-knots-gui .
 ```
 
-Once finished, confirm that image exists in Unraid by listing all images. The first one in the list should be `bitcoinknots` image.
+Once finished, confirm that image exists in Unraid by listing all images. The first one in the list should be `bitcoin-knots-gui` image.
 
 ``` bash
 docker images
@@ -67,32 +69,35 @@ docker images
 
 ---
 
-### 4. Deploy Unraid container from bitcoinknots image**
+### 4. Deploy Unraid container from bitcoin-knots-gui image**
 
-To deploy the `bitcoinknots` image in Unraid go to:
+To deploy the `bitcoin-knots-gui` image in Unraid go to:
 
-**Docker** → **Add Container** → Change `**Basic Vinew**` to `**Advanced View**` 
+**Docker** → **Add Container** → Change **Basic View** to **Advanced View**
 
 Use these settings:
 
-| Line              | Value                             |
-| ----------------- | ---------------------------------------- |
-| Name              | bitcoinknots                             |
-| Repository        | bitcoinknots                             |
-| Icon URL          | https://bitcoinknots.org/favicon.ico     |
-| Network Type      | `Bridge` (or `Host`, depending on setup) |
-| Extra Parameters  | --restart unless-stopped                 |
+| Line             | Value                                    |
+| ---------------- | ---------------------------------------- |
+| Name             | bitcoin-knots-gui                        |
+| Repository       | bitcoin-knots-gui                        |
+| Icon URL         | https://bitcoinknots.org/favicon.ico     |
+| WebUI            | http://[IP]:[PORT:6080]/vnc.html         |
+| Network Type     | `Bridge` (or `Host`, depending on setup) |
+| Extra Parameters | --restart unless-stopped                 |
 
-##### **Add Volume Mapping**
+![Pasted image 20250627160403](https://github.com/user-attachments/assets/914e3f3e-cbeb-4d97-8a2b-87d121ee4891)
+
+
+###### **Add Volume Mapping**
 
 Click **Add another Path, Port, Variable, Label or Device** → Config Type: **Path**
 
-
-| Config Type    | Path                           |
-| -------------- | ------------------------------ |
-| Name           | Blockchain data                |
-| Container Path | `/bitcoin`                     |
-| Host Path      | `/mnt/user/bitcoin/`           |
+| Config Type    | Path                 |
+| -------------- | -------------------- |
+| Name           | Blockchain data      |
+| Container Path | `/bitcoin`           |
+| Host Path      | `/mnt/user/bitcoin/` |
 
 ###### **Add Port Mappings:**
 
@@ -100,27 +105,29 @@ Click **Add another Path, Port, Variable, Label or Device** → Config Type: **P
 | ---------------- | -------------- | --------- | --------------- |
 | Bitcoin P2P port | 8333           | 8333      | TCP             |
 | RPC port         | 8332           | 8332      | TCP             |
+| VNC_PORT         | 5900           | 5900      | TCP             |
+| NOVNC_PORT       | 6080           | 6080      | TCP             |
 
-
-![image](https://github.com/user-attachments/assets/a1c9d8a8-f775-40b5-b570-a71a436c51a4)
-
+![Pasted image 20250627160657](https://github.com/user-attachments/assets/ca40f43e-1c06-465d-aae3-561c0dcbcab0)
 
 
 `APPLY` the changes → Go to **Docker** tab → Click on `bitcoinknots` container icon → `Logs` → check if the blockchain is synching. 
 
 ---
 
-Note: If want to run same immage in Docker on your PC or MAC - you need to download [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Rancher Desktop](https://rancherdesktop.io/) and execute all the commands abouve.
+Note: If want to run `bitcoin-knots-gui` image in Docker on your PC or MAC - you need to download [Docker Desktop](https://www.docker.com/products/docker-desktop/) or [Rancher Desktop](https://rancherdesktop.io/) and build the image on your PC that contains the app.
 
 Use `docker run` command below if you want to spin the container in Docker instead. 
 
 ``` bash
 docker run -d \
-  --name=bitcoinknots \
+  --name=bitcoin-knots-gui \
   -p 8332:8332 \
   -p 8333:8333 \
-  -v /mnt/user/appdata/bitcoinknots:/bitcoin \
+  -p 8333:5900 \
+  -p 8333:6080 \
+  -v /mnt/user/bitcoin:/bitcoin \
   --restart unless-stopped \
-  bitcoinknots
+  bitcoin-knots-gui
 
 ```
