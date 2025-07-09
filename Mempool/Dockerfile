@@ -1,22 +1,15 @@
 FROM node:18-bullseye-slim
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-  git \
-  curl \
-  nginx \
-  && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y git nginx curl && rm -rf /var/lib/apt/lists/*
 
-# Set up working directory
 WORKDIR /mempool
+RUN git clone https://github.com/mempool/mempool.git .
+RUN git checkout master
 
-# Clone mempool project
-RUN git clone https://github.com/mempool/mempool.git . && \
-    git checkout master
-
-# Install backend dependencies and build
 WORKDIR /mempool/backend
-RUN npm ci && npm run build
+ENV CI=false
+RUN npm install --prefer-offline --no-audit
+RUN npm run build
 
 # Install frontend dependencies and build
 WORKDIR /mempool/frontend
