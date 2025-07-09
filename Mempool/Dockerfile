@@ -1,51 +1,42 @@
-# Stage 1: Build frontend
-FROM node:20 AS frontend
+FROM node:18-bullseye-slim
 
-WORKDIR /app
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+  git \
+  curl \
+  nginx \
+  && rm -rf /var/lib/apt/lists/*
 
-# Clone mempool repository
-RUN git clone https://github.com/mempool/mempool.git .
-
-WORKDIR /app/frontend
-
-# Install dependencies and build frontend
-RUN npm install && npm run build
-
-# Stage 2: Build backend
-FROM node:20 AS backend
-
-WORKDIR /app
-
-# Clone again for backend
-RUN git clone https://github.com/mempool/mempool.git .
-
-WORKDIR /app/backend
-
-# Install backend dependencies
-RUN npm install
-
-# Stage 3: Runtime image
-FROM node:20-slim
-
-# Create app directory
+# Set up working directory
 WORKDIR /mempool
 
-# Copy built frontend and backend
-COPY --from=backend /app/backend /mempool/backend
-COPY --from=frontend /app/frontend/dist /mempool/frontend/dist
+# Clone mempool project
+RUN git clone https://github.com/mempool/mempool.git . && \
+    git checkout master
 
-# Set environment defaults
-ENV MEMPOOL_NETWORK=mainnet
+# Install backend dependencies and build
+WORKDIR /mempool/backend
+RUN npm ci && npm run build
+
+# Install frontend dependencies and build
+WORKDIR /mempool/frontend
+RUN npm ci && npm run build
+
+# Configure Nginx to serve frontend and proxy backend API
+RUN rm /etc/nginx/sites-enabled/default
+COPY nginx.conf /etc/nginx/conf.d/mempool.conf
+
+# Set environment variables for the backend
+ENV CORE_RPC_HOST=bitcoin
+ENV CORE_RPC_PORT=8332
+ENV CORE_RPC_USERNAME=bitcoinrpc
+ENV CORE_RPC_PASSWORD=changeme
 ENV MEMPOOL_BACKEND=none
+ENV DATABASE_ENABLED=false
+ENV STATISTICS_ENABLED=true
 
-# Install PM2 to run multiple services
-RUN npm install -g pm2
+# Expose port for Nginx frontend
+EXPOSE 80
 
-# Start backend (port 8998) and frontend (port 8080) with PM2
-COPY start.sh /mempool/start.sh
-RUN chmod +x /mempool/start.sh
-
-EXPOSE 8080
-EXPOSE 8998
-
-CMD ["/mempool/start.sh"]
+# Start both backend and nginx in parallel
+CMD ["sh", "-c", "node /mempool/backend/dist/index.js & nginx -g 'daemon off;'"]
