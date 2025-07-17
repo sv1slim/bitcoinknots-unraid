@@ -31,11 +31,11 @@ Replace `myuser` and `mypassword` with a strong username and password.
 `bitcoin.conf`
 ``` ini
 server=1
-rpcuser=myuser
-rpcpassword=mypassword
 txindex=1
-zmqpubrawtx=tcp://0.0.0.0:28332
-zmqpubrawblock=tcp://0.0.0.0:28333
+rpcuser=bitcoinrpc
+rpcpassword=mypassword
+rpcallowip=192.168.0.0/16
+rpcbind=0.0.0.0
 ```
 
 ![image](https://github.com/user-attachments/assets/137af59f-f3b2-4d10-b47b-57ad09a30220)
