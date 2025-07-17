@@ -44,6 +44,6 @@ RUN chmod +x /usr/local/bin/start.sh
 ###############################################################################
 # 5) Container meta. Port 6080 = WebUI
 ############################################################################### 
-VOLUME ["/bitcoin"]
+VOLUME ["/root/.bitcoin"]
 EXPOSE 6080 5900 8332 8333
 ENTRYPOINT ["/usr/local/bin/start.sh"]
