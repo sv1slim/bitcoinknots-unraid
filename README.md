@@ -44,6 +44,8 @@ git clone https://github.com/sv1slim/bitcoinknots-unraid
 
 Copy `Dockerfile-BitcoinKnots-GUI-xx.x` folder with the latest version `xx.x` into your `\\unraid.local\bitcoin` share.
 
+Copy `bitcoin.conf` to the main `bitcoin` share. Don't forget to change RPC password.
+
 ---
 
 ### 3. Build the image on Unraid
