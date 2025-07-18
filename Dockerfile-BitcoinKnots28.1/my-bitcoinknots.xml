@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>bitcoinknots</Name>
+  <Repository>bitcoinknots</Repository>
+  <Registry/>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support/>
+  <Project/>
+  <Overview>Bitcoin Knots full node</Overview>
+  <Category/>
+  <WebUI/>
+  <TemplateURL/>
+  <Icon>https://bitcoinknots.org/favicon.ico</Icon>
+  <ExtraParams>--restart unless-stopped</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled>1749918276</DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  <Config Name="Blockchain data" Target="/bitcoin" Default="/mnt/user/appdata/bitcoinknots" Mode="rw" Description="" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/bitcoin/</Config>
+  <Config Name="Bitcoin P2P port" Target="8333" Default="" Mode="tcp" Description="" Type="Port" Display="always" Required="false" Mask="false">8333</Config>
+  <Config Name="RPC port" Target="8332" Default="" Mode="tcp" Description="" Type="Port" Display="always" Required="false" Mask="false">8332</Config>
+  <TailscaleStateDir/>
+</Container>
