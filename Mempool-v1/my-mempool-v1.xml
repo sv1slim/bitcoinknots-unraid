@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>mempool</Name>
+  <Repository>mempool/mempool:v1.0</Repository>
+  <Registry/>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support/>
+  <Project/>
+  <Overview>Bitcoin Knots full-node with GUI accessible via browser (noVNC).</Overview>
+  <Category/>
+  <WebUI>http://[IP]:[PORT:8081]</WebUI>
+  <TemplateURL/>
+  <Icon>https://freeter.io/web-apps/bitcoin/mempool-space/mempool-space.png</Icon>
+  <ExtraParams>--restart unless-stopped</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled>1752809558</DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  <Config Name="BITCOIN_NODE_HOST" Target="BITCOIN_NODE_HOST" Default="192.168.0.100" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false">192.168.0.100</Config>
+  <Config Name="BITCOIN_NODE_USER" Target="BITCOIN_NODE_USER" Default="bitcoinrpc" Mode="" Description="" Type="Variable" Display="always" Required="false" Mask="false">bitcoinrpc</Config>
+  <Config Name="BITCOIN_NODE_PASS" Target="BITCOIN_NODE_PASS" Default="supersecretpassword" Mode="" Description="rpc password" Type="Variable" Display="always" Required="false" Mask="true">supersecretpassword</Config>
+  <Config Name="Mempool port" Target="8999" Default="8999" Mode="tcp" Description="Port" Type="Port" Display="always" Required="true" Mask="false">8999</Config>
+  <Config Name="Mempool UI port" Target="80" Default="" Mode="tcp" Description="" Type="Port" Display="always" Required="false" Mask="false">8081</Config>
+  <TailscaleStateDir/>
+</Container>
