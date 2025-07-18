@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>bitcoin-knots-gui</Name>
+  <Repository>bitcoin-knots-gui-28.1</Repository>
+  <Registry/>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support/>
+  <Project/>
+  <Overview>Bitcoin Knots full-node with GUI accessible via browser (noVNC).</Overview>
+  <Category/>
+  <WebUI>http://[IP]:[PORT:6080]/vnc.html</WebUI>
+  <TemplateURL/>
+  <Icon>https://bitcoinknots.org/favicon.ico</Icon>
+  <ExtraParams>--restart unless-stopped</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled>1752773673</DateInstalled>
+  <DonateText/>
+  <DonateLink/>
+  <Requires/>
+  <Config Name="Blockchain data" Target="/root/.bitcoin" Default="/mnt/user/bitcoin/" Mode="rw" Description="" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/bitcoin/</Config>
+  <Config Name="Bitcoin P2P port" Target="8333" Default="8333" Mode="tcp" Description="" Type="Port" Display="always" Required="false" Mask="false">8333</Config>
+  <Config Name="RPC port" Target="8332" Default="8332" Mode="tcp" Description="" Type="Port" Display="always" Required="false" Mask="false">8332</Config>
+  <Config Name="VNC_PORT" Target="5900" Default="" Mode="tcp" Description="" Type="Port" Display="always" Required="false" Mask="false">5900</Config>
+  <Config Name="NOVNC_PORT" Target="6080" Default="" Mode="tcp" Description="" Type="Port" Display="always" Required="false" Mask="false">6080</Config>
+  <TailscaleStateDir/>
+</Container>
