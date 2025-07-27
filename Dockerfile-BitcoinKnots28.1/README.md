@@ -34,8 +34,8 @@ server=1
 txindex=1
 rpcuser=bitcoinrpc
 rpcpassword=mypassword
-rpcallowip=192.168.0.0/16
 rpcbind=0.0.0.0
+rpcallowip=0.0.0.0/0
 ```
 
 ![image](https://github.com/user-attachments/assets/137af59f-f3b2-4d10-b47b-57ad09a30220)
@@ -91,7 +91,7 @@ Click **Add another Path, Port, Variable, Label or Device** → Config Type: **P
 | Config Type    | Path                           |
 | -------------- | ------------------------------ |
 | Name           | Blockchain data                |
-| Container Path | `/bitcoin`                     |
+| Container Path | `/root/.bitcoin`                     |
 | Host Path      | `/mnt/user/bitcoin/`           |
 
 ###### **Add Port Mappings:**
@@ -119,8 +119,44 @@ docker run -d \
   --name=bitcoinknots \
   -p 8332:8332 \
   -p 8333:8333 \
-  -v /mnt/user/appdata/bitcoinknots:/bitcoin \
+  -v /mnt/user/bitcoin/:/root/.bitcoin \
   --restart unless-stopped \
   bitcoinknots
+```
 
+### 5. Troubleshooting**
+
+Check logs to make sure the blockchain is synching:
+``` bash
+docker logs bitcoinknots
+```
+
+Run this to inspect the file `bitcoin.conf` :
+``` bash
+docker exec -it bitcoinknots cat /root/.bitcoin/bitcoin.conf
+```
+
+Get response from blockchain info:
+``` bash
+docker exec -it bitcoinknots bitcoin-cli getblockchaininfo
+docker exec -it bitcoinknots bitcoin-cli getbestblockhash
+```
+
+check RPC information:
+``` bash
+docker exec -it bitcoinknots bitcoin-cli getrpcinfo
+```
+
+
+Check if RPC Port is Open Locally on Unraid server:
+``` bash
+netstat -tuln | grep 8332
+```
+You should see something like: `LISTEN 0 128 0.0.0.0:8332`
+If you see nothing: `bitcoind` isn’t listening on port `8332`.
+
+
+Or externally from Windows PC:
+``` powershell
+telnet 192.168.0.100 8332
 ```
