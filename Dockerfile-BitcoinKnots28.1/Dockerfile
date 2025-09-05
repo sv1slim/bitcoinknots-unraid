@@ -8,8 +8,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 
 # Set environment variables
-ENV BITCOIN_KNOTS_VERSION=28.1.knots20250305
-ENV BITCOIN_KNOTS_URL=https://bitcoinknots.org/files/28.x/${BITCOIN_KNOTS_VERSION}/bitcoin-${BITCOIN_KNOTS_VERSION}-x86_64-linux-gnu.tar.gz
+ENV BITCOIN_KNOTS_VERSION=29.1.knots20250903
+ENV BITCOIN_KNOTS_URL=https://bitcoinknots.org/files/29.x/${BITCOIN_KNOTS_VERSION}/bitcoin-${BITCOIN_KNOTS_VERSION}-x86_64-linux-gnu.tar.gz
 
 # Download and install Bitcoin Knots
 RUN wget -q ${BITCOIN_KNOTS_URL} && \
