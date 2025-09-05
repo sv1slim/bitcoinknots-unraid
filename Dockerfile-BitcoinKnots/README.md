@@ -48,7 +48,7 @@ rpcallowip=0.0.0.0/0
 Open Unraid Terminal and get into `Dockerfile` folder
 
 ``` bash
-cd /mnt/user/bitcoin/Dockerfile-BitcoinKnots28.1/
+cd /mnt/user/bitcoin/Dockerfile-BitcoinKnots/
 ```
 
 Run docker build command to create `bitcoinknots` image using `Dcokerfile` located in `/mnt/user/bitcoin/Dockerfile-BitcoinKnotsXX.X/` folder.
